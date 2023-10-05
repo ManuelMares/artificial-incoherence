@@ -4,6 +4,7 @@ To read the proposal, check the 'Project Proposal' (pdf or docxs).
 
 # Soruces
 https://en.www.inegi.org.mx/datosabiertos/
+https://www.economia.gob.mx/datamexico/es/vizbuilder
 
 
 # Schedule
