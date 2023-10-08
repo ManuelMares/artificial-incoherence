@@ -34,6 +34,11 @@ print("This is and example of an interactive cell in VSCode.")
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
+import seaborn as sns
+plt.style.use('ggplot')
+# pd.set_option('max_columns', 200)
+
+
 
 #imports for metrics evaluation
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -58,23 +63,47 @@ from sklearn.preprocessing import LabelEncoder
 
 
 #%%
+#import data set
 df_school_enrollment = pd.read_csv("./DataSets/academic_degree_enrollment.csv")
-df_crime_records = pd.read_csv("./DataSets/crime_records.csv")
-df_hospitals_location = pd.read_csv("./DataSets/hospitals_by_location.csv")
 df_job_status = pd.read_csv("./DataSets/job_status.csv")
 df_population_access = pd.read_csv("./DataSets/population_access.csv")
 df_poverty = pd.read_csv("./DataSets/poverty.csv")
 df_safety_perception = pd.read_csv("./DataSets/safety_perception.csv")
 df_students_status = pd.read_csv("./DataSets/students_status.csv")
-df_workforce_by_sector = pd.read_csv("./DataSets/workforce_by_sector.csv")
-
 
 
 
 #%%
-dfs = [df_school_enrollment, df_crime_records, df_hospitals_location, df_job_status, df_population_access, df_poverty, df_safety_perception, df_students_status, df_workforce_by_sector]
+dfs = [df_school_enrollment, df_job_status, df_population_access, df_poverty, df_safety_perception, df_students_status]
 
 for df in dfs:
     # print(df.describe)
-    print(df.dtypes, "\n\n")
+    # print(df.dtypes)
+    print(df.shape)
+    # print(df.columns, "\n\n")
+    # df.hist(bins=60, figsize=(20,10))
+    print(len(df["National Urban System"].unique()))
+
+
+
+# %%
+for df in dfs:
+    print(df.shape)
+    print(df.dtypes)
+
+
+
+
+
+
+
+
+
+
+# %%
+#exploring df_population_access
+df_population_access.describe()
+df_population_access.head()
+df_population_access.columns
+
 # %%

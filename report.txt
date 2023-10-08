@@ -1,0 +1,20 @@
+1) databases
+https://en.www.inegi.org.mx/datosabiertos/
+https://www.economia.gob.mx/datamexico/es/vizbuilder
+
+2) datasets
+school_enrollment
+job_status
+population_access
+poverty
+safety_perception
+students_status
+crime_records
+hospitals_by_location
+academic_degree_enrollment
+
+3) Dropped datasets
+due to not being based in the National Urban System as the rest of the datasets.
+crime_records
+hospitals_by_location
+academic_degree_enrollment
