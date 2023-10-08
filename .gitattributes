@@ -1,5 +1,6 @@
 DataSets/*.csv filter=lfs diff=lfs merge=lfs -text
-DataSets/academic_degree_enrollment.csv filter=lfs diff=lfs merge=lfs -text
+./DataSets/academic_degree_enrollment.csv filter=lfs diff=lfs merge=lfs -text
+academic_degree_enrollment.csv filter=lfs diff=lfs merge=lfs -text
 *.csv filter=lfs diff=lfs merge=lfs -text
 *.docx filter=lfs diff=lfs merge=lfs -text
 *.pdf filter=lfs diff=lfs merge=lfs -text
