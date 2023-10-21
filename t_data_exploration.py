@@ -21,10 +21,11 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.preprocessing import LabelEncoder
 
-df = pd.read_csv("./data/Academic Degree Population.csv")
-print(df.head)
+
 
 #%%
+df = pd.read_csv("./data/Academic Degree Population.csv")
+print(df.head)
 highEdDf = df[df["Academic Degree ID"] > 5]
 highEdDf = highEdDf[highEdDf["Academic Degree ID"] < 99]
 
@@ -46,8 +47,8 @@ aggregated_working_age = aggregated_working_age.rename(columns={'Population' : "
 aggregated_working_age.to_csv('./DataSets/working_age_population.csv')
 
 # %%
-df = pd.read_csv("./data/Foreign Migrant Population.csv")
-df2 = pd.read_csv("./DataSets/Total Population.csv")
+df = pd.read_csv("./Data/foreign_migrant_population.csv")
+df2 = pd.read_csv("./DataSets/total_population.csv")
 
 df = df[df["Foreign Migrant ID"] == 0]
 aggregate_functions = {'National Urban System': 'first', 'Population': 'first'}
@@ -62,7 +63,7 @@ df.to_csv('./DataSets/foreign_migrant_population.csv')
 
 
 # %%
-df = pd.read_csv("./data/Healthcare Population.csv")
+df = pd.read_csv("./Data/Healthcare Population.csv")
 df = df[df["Health Care ID"] < 8]
 
 aggregate_functions = {'National Urban System': 'first', 'Population': 'sum'}
