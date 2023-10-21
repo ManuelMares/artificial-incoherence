@@ -32,10 +32,6 @@ print("This is and example of an interactive cell in VSCode.")
 
 # %%
 import pandas as pd
-import numpy as np
-from matplotlib import pyplot as plt
-import seaborn as sns
-plt.style.use('ggplot')
 
 
 
@@ -51,9 +47,11 @@ plt.style.use('ggplot')
 #exploring religion_status
 df = pd.read_csv("./SourceDataSets/religion_status.csv")
 Catholic_people = df[df["Religion"] == "Catholic"]
-Catholic_people = Catholic_people.drop("Religion ID", axis=1)
-Catholic_people = Catholic_people.drop("Religion", axis=1)
+Catholic_people
+aggregation_functions = {'National Urban System': 'first', "Population":"first"}
+Catholic_people = df.groupby(Catholic_people['National Urban System ID']).aggregate(aggregation_functions)
 Catholic_people = Catholic_people.rename(columns={'Population':"Amount Catholic Population"})
+Catholic_people
 Catholic_people.to_csv("./DataSets/Catholic_people.csv")
 
 
@@ -65,8 +63,8 @@ Catholic_people.to_csv("./DataSets/Catholic_people.csv")
 #exploring literacy_status
 df = pd.read_csv("./SourceDataSets/literacy_status.csv")
 literacy_status = df[df["Literate"] == "Yes"]
-literacy_status = literacy_status.drop("Literate ID", axis=1)
-literacy_status = literacy_status.drop("Literate", axis=1)
+aggregation_functions = {'National Urban System': 'first', "Population":"first"}
+literacy_status = df.groupby(literacy_status['National Urban System ID']).aggregate(aggregation_functions)
 literacy_status = literacy_status.rename(columns={'Population':"Amount of Literate Population"})
 literacy_status.to_csv("./DataSets/literacy_status.csv")
 
@@ -79,10 +77,9 @@ literacy_status.to_csv("./DataSets/literacy_status.csv")
 #exploring indigenous_status
 df = pd.read_csv("./SourceDataSets/indigenous_status.csv")
 indigenous_status = df[df["Indigenous Self Abscribing"] == "Yes"]
-indigenous_status = indigenous_status.drop("Indigenous Self Abscribing ID", axis=1)
-indigenous_status = indigenous_status.drop("Indigenous Self Abscribing", axis=1)
+aggregation_functions = {'National Urban System': 'first', "Population":"first"}
+indigenous_status = df.groupby(indigenous_status['National Urban System ID']).aggregate(aggregation_functions)
 indigenous_status = indigenous_status.rename(columns={'Population':"Amount of Indigenous Population"})
-indigenous_status
 indigenous_status.to_csv("./DataSets/indigenous_status.csv")
 
 
@@ -118,7 +115,7 @@ salary_wages
 aggregation_functions = {'National Urban System': 'first', "Workforce":"sum"}
 aggregated_salaries = df.groupby(df['National Urban System ID']).aggregate(aggregation_functions)
 aggregated_salaries = aggregated_salaries.rename(columns={'Workforce':"Average Salary or Less"})
-aggregated_salaries.to_csv("./DataSets/average_salaries_or_less.csv")
+aggregated_salaries.to_csv("./DataSets/average_salaries_or_less.csv", index_col=False)
 
 
 

@@ -49,16 +49,47 @@ from matplotlib import pyplot as plt
 
 
 #%%
-df_total_population               = pd.read_csv("./DataSets/total_population.csv")      
-df_Catholic_people                = pd.read_csv("./DataSets/Catholic_people.csv")      
-df_foreign_migrant_population     = pd.read_csv("./DataSets/foreign_migrant_population.csv")                  
-df_has_healthcare                 = pd.read_csv("./DataSets/has_healthcare.csv")      
-df_higher_education_population    = pd.read_csv("./DataSets/higher_education_population.csv")                  
-df_indigenous_status              = pd.read_csv("./DataSets/indigenous_status.csv")          
-df_literacy_status                = pd.read_csv("./DataSets/literacy_status.csv")      
-df_working_age_population         = pd.read_csv("./DataSets/working_age_population.csv")              
+# dfs = []
+# dfs.append(pd.read_csv("./DataSets/total_population.csv"))      
+# dfs.append(pd.read_csv("./DataSets/Catholic_people.csv"))      
+# dfs.append(pd.read_csv("./DataSets/foreign_migrant_population.csv"))                  
+# dfs.append(pd.read_csv("./DataSets/has_healthcare.csv"))      
+# dfs.append(pd.read_csv("./DataSets/higher_education_population.csv"))                  
+# dfs.append(pd.read_csv("./DataSets/indigenous_status.csv"))          
+# dfs.append(pd.read_csv("./DataSets/literacy_status.csv"))      
+# dfs.append(pd.read_csv("./DataSets/working_age_population.csv"))              
+# dfs.append(pd.read_csv("./DataSets/poverty_statistics.csv"))              
+
+
+
+
+
+# # %%
+# #combines all the dfs into a single df
+# df = dfs[0]
+# for i in range(1,len(dfs)):
+#     df = pd.merge(df, dfs[i], on='National Urban System ID', how="left")
+# df
+
+# # %%
+# #delete duplicated columns
+# df = df.loc[:,~df.columns.duplicated()].copy()
+# df
+# # %%
+# df.to_csv("./DataSets/main_dataset.csv")
+
+
+
+
+
+
+
+
+
+
+
 
 
 # %%
-df = 
-# %%
+df = pd.read_csv("./DataSets/main_dataset.csv")
+df
