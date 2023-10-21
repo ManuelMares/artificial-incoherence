@@ -87,12 +87,32 @@ from matplotlib import pyplot as plt
 
 
 # %%
-df = pd.read_csv("./DataSets/main_dataset.csv")
-df
+# df = pd.read_csv("./DataSets/main_dataset.csv")
+#checking if there are null values: no null values
+# df.isna().sum()
+# df.corr()
 
-df.cov()
-df.corr()
+
+# %%
+# df.hist(figsize=(20,20), bins=5)
+
+#getting relative values
+#these are the columns that will be converted into relative values from the total population of the goegraphical area
+# dfs_columns = ["Working Population", "Amount Catholic Population", "Foreign Migrant Population", "Has Healthcare", "Higher Education", "Amount of Indigenous Population", "Amount of Literate Population", "Poverty", "Population with at least 1 Social Lack", "Income below Welfare Line"]
+# population = df["Population"]
+# for col in dfs_columns:
+#     #divides the col in dfs_columns by the populaiton column
+#     df[col] = df[col].div(population, axis=0)
+
+
+
+# df.to_csv("./DataSets/normalized_data.csv")
+
+
+
 
 
 
 # %%
+df = pd.read_csv("./DataSets/normalized_data.csv")
+df
