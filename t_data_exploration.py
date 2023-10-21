@@ -47,7 +47,7 @@ aggregated_working_age.to_csv('./DataSets/working_age_population.csv')
 
 # %%
 df = pd.read_csv("./data/Foreign Migrant Population.csv")
-df2 = pd.read_csv("./data/Total Population.csv")
+df2 = pd.read_csv("./DataSets/Total Population.csv")
 
 df = df[df["Foreign Migrant ID"] == 0]
 aggregate_functions = {'National Urban System': 'first', 'Population': 'first'}
