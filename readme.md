@@ -10,7 +10,7 @@ To read the proposal, check the 'Project Proposal' (pdf or docxs).
 
 # Sources
 https://en.www.inegi.org.mx/datosabiertos/
-https://www.economia.gob.mx/datamexico/es/vizbuilder
+https://www.economia.gob.mx/datamexico/en/vizbuilder
 
 
 # Schedule
