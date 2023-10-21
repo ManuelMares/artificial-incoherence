@@ -82,8 +82,8 @@ indigenous_status = df[df["Indigenous Self Abscribing"] == "Yes"]
 indigenous_status = indigenous_status.drop("Indigenous Self Abscribing ID", axis=1)
 indigenous_status = indigenous_status.drop("Indigenous Self Abscribing", axis=1)
 indigenous_status = indigenous_status.rename(columns={'Population':"Amount of Indigenous Population"})
+indigenous_status
 indigenous_status.to_csv("./DataSets/indigenous_status.csv")
-
 
 
 
@@ -96,7 +96,11 @@ indigenous_status.to_csv("./DataSets/indigenous_status.csv")
 # %%
 #exploring salary_wages
 df = pd.read_csv("./SourceDataSets/salary_wages.csv")
-df["Salary Group"].value_counts()
+
+#%%
+df["National Urban System ID"].unique().size
+
+#%%
 #considering an average salary of 7800 MX as of 2023
 salary_wages = df.loc[
     (df["Salary Group"] == "$4k - $5k") |
@@ -117,3 +121,5 @@ aggregated_salaries = aggregated_salaries.rename(columns={'Workforce':"Average S
 aggregated_salaries.to_csv("./DataSets/average_salaries_or_less.csv")
 
 
+
+# %%
