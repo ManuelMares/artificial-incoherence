@@ -116,3 +116,8 @@ from matplotlib import pyplot as plt
 # %%
 df = pd.read_csv("./DataSets/normalized_data.csv")
 df
+df.corr()
+# %%
+df.hist(figsize=(20,20), bins=5)
+
+# %%
