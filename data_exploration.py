@@ -42,7 +42,7 @@ plt.style.use('ggplot')
 
 #imports for metrics evaluation
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.metrics import accuracy_score, confusion_matrix 
+from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.preprocessing import LabelEncoder
 
 #imports for models
@@ -78,9 +78,9 @@ dfs = [df_school_enrollment, df_job_status, df_population_access, df_poverty, df
 
 for df in dfs:
     # print(df.describe)
-    # print(df.dtypes)
+    #print(df.dtypes)
     print(df.shape)
-    # print(df.columns, "\n\n")
+    print(df.columns, "\n\n")
     # df.hist(bins=60, figsize=(20,10))
     print(len(df["National Urban System"].unique()))
 
