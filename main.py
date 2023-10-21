@@ -61,21 +61,17 @@ from matplotlib import pyplot as plt
 # dfs.append(pd.read_csv("./DataSets/poverty_statistics.csv"))              
 
 
-
-
-
-# # %%
 # #combines all the dfs into a single df
 # df = dfs[0]
 # for i in range(1,len(dfs)):
 #     df = pd.merge(df, dfs[i], on='National Urban System ID', how="left")
-# df
 
-# # %%
+
 # #delete duplicated columns
+# #%%
 # df = df.loc[:,~df.columns.duplicated()].copy()
-# df
-# # %%
+
+# # df
 # df.to_csv("./DataSets/main_dataset.csv")
 
 
@@ -93,3 +89,10 @@ from matplotlib import pyplot as plt
 # %%
 df = pd.read_csv("./DataSets/main_dataset.csv")
 df
+
+df.cov()
+df.corr()
+
+
+
+# %%
