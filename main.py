@@ -104,16 +104,17 @@
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
+import seaborn as sb 
 
 #imports for metrics evaluation
-# from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split, cross_val_score
 # from sklearn.metrics import accuracy_score, confusion_matrix
 # from sklearn.preprocessing import LabelEncoder
 
 #imports for models
-# from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LinearRegression
 # from sklearn.ensemble import RandomForestClassifier
-# from sklearn.neighbors import KNeighborsClassifier as KNN
+from sklearn.neighbors import KNeighborsClassifier as KNN
 # from sklearn.svm import SVC
 
 
@@ -169,7 +170,6 @@ def boxplot(columns=_FEATURE_COLUMNS):
     print(Lower_fence)
     print(Upper_fence)
 
-
 """
 Plots a histogram figure and indicates the fence values for the outliers
 @param dataset (optional)
@@ -183,8 +183,105 @@ def histogram(dataset=DF):
     dataset.hist(figsize=(20,20), bins=5)
 
 
+"""
+Plots a heatmap figure indicates the correlation between features
+@param dataset (optional)
+    The version of the data set to print
+    If no parameter is given, the default value is the normalized version DF
+
+@posconditions
+    A heatmap figure is printed in the interactive window
+"""
+def heatmap(dataset=DF):
+    # plotting correlation heatmap 
+    dataplot = sb.heatmap(dataset.corr(), cmap="YlGnBu", annot=True)   
+    # displaying heatmap 
+    plt.show() 
+
+"""
+Splits a dataset and returns X_train, y_train, X_test, y_test
+@param label
+    The feature to predict
+@param dataset
+    The dataset to use. Default value is DF
+@param test_size
+    The size of the test dataset. The default value is 0.2
+@return  X_train
+    A dataset with the features for training
+@return  y_train
+    A dataset with the target for training
+@return  X_test
+    A dataset with the features for testing
+@return  y_test
+    A dataset with the target for testing
+"""
+def train_test(label, dataset=DF, test_size=0.2):
+    #splitting into train and test sets
+    train, test = train_test_split(dataset, test_size=test_size)
+
+    #splitting into labels and features    
+    X_train, y_train = train.loc[:, train.columns != label], train.loc[:,train.columns  == label]
+    X_test, y_test = test.loc[:, test.columns != label], test.loc[:,test.columns  == label]
+
+    return X_train, y_train, X_test, y_test
+
+"""
+Given a k range, this function trains a KNN model to identify the most option k.
+@param k_range
+    The array with the k values to test
+@param X_train
+    The train dataset of features
+@param y_train
+    The target dataset
+@param fold
+    The fold value for the knn model
+@return
+    The best k value
+"""
+def get_best_K(k_range, X_train, y_train, fold):
+    best_accuracy = 0
+    best_k = 0 
+    print(X_train, y_train)
+    for k in range(k_range[0], k_range[1]+1):
+        print("this is k ", k, " best k so far: ", best_k )
+        knn = KNN(n_neighbors=k)
+        #this function returns 5 values for each of the 5 folds. The mean gives the average value
+        accuracy = cross_val_score(knn, X=X_train, y=y_train, cv=fold ).mean()
+        if accuracy > best_accuracy:
+            best_accuracy = accuracy
+            best_k = k
+            
+    return best_k
 
 
+
+"""
+Trains the best knn model and return the accuracy
+@param dataset
+    The dataset to use. Default value is DF
+@param label
+    The feature to predict
+@return 
+    An integer indicating the accuracy
+"""
+def knn(label, dataset=DF):
+    X_train, y_train, X_test, y_test = train_test(label=label, dataset=dataset, test_size=0.2)
+    k_test = (1,50)
+    fold = 5
+    best_k = get_best_K(k_test, X_train, y_train, fold) 
+
+    knn = KNN(n_neighbors=best_k)
+    knn.fit(X_train, y_train)
+    accuracy = knn.score(X_test, y_test)
+    return accuracy
+
+def lr(label, dataset=DF):
+    X_train, y_train, X_test, y_test = train_test(label=label, dataset=dataset, test_size=0.2)
+
+    lc = LinearRegression()
+    lc.fit(X=X_train, y=y_train)
+    accuracy = lc.score(X_test, y_test)
+    return accuracy
 
 
 
@@ -200,3 +297,34 @@ boxplot()
 histogram()
 
 
+
+
+#%%
+DF.corr()
+heatmap()
+
+
+
+
+
+# %%
+#knn to predict higher education
+df_higher_education = DF
+df_higher_education = df_higher_education.loc[:, df_higher_education.columns != "National Urban System_x"]
+df_higher_education = df_higher_education.loc[:, df_higher_education.columns != "National Urban System ID"]
+
+# accuracy = knn(label = "Higher Education", dataset=df_higher_education)
+accuracy = lr(label = "Higher Education", dataset=df_higher_education)
+print("Test set accuracy: ", accuracy)
+
+# df_higher_education = df_higher_education.loc[:, df_higher_education.columns != "Income below Welfare Line"]
+# df_higher_education = df_higher_education.loc[:, df_higher_education.columns != "Population with at least 1 Social Lack"]
+accuracy = lr(label = "Poverty", dataset=df_higher_education)
+print("Test set accuracy: ", accuracy)
+ 
+
+
+
+# %%
+DF
+# %%
