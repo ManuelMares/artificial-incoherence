@@ -19,8 +19,64 @@
         • Schedule
 
 """
+
+
+
+#==============================================================================
+#======================BUILDING MAIN CSV=======================================
+#==============================================================================
+#THERE IS NO NEED TO RUN ANY OF THESE COMMENTED CODE
+#IT IS LEFT HERE AS EVIDENCE AND REFERENCE TO OUR PREVIOUS WORK
+
+
 #%%
-print("This is and example of an interactive cell in VSCode.")
+#this section loads the different datasets
+# dfs = []
+# dfs.append(pd.read_csv("./DataSets/total_population.csv"))
+# dfs.append(pd.read_csv("./DataSets/Catholic_people.csv"))
+# dfs.append(pd.read_csv("./DataSets/foreign_migrant_population.csv"))
+# dfs.append(pd.read_csv("./DataSets/has_healthcare.csv"))
+# dfs.append(pd.read_csv("./DataSets/higher_education_population.csv"))
+# dfs.append(pd.read_csv("./DataSets/indigenous_status.csv"))
+# dfs.append(pd.read_csv("./DataSets/literacy_status.csv"))
+# dfs.append(pd.read_csv("./DataSets/working_age_population.csv"))
+# dfs.append(pd.read_csv("./DataSets/poverty_statistics.csv"))
+
+#combines all the dfs into a single df
+# df = dfs[0]
+# for i in range(1,len(dfs)):
+#     df = pd.merge(df, dfs[i], on='National Urban System ID', how="left")
+
+
+#delete duplicated columns
+# df = df.loc[:,~df.columns.duplicated()].copy()
+#store main dataset
+# df.to_csv("./DataSets/main_dataset.csv")
+
+
+#checking if there are null values: no null values
+# df = pd.read_csv("./DataSets/main_dataset.csv")
+# df.isna().sum()
+# df.corr()
+
+#printing a histogram of values
+# df.hist(figsize=(20,20), bins=5)
+
+#Normalizing the values (relative to total population column) 
+# dfs_columns = ["Working Population", "Amount Catholic Population", "Foreign Migrant Population", "Has Healthcare", "Higher Education", "Amount of Indigenous Population", "Amount of Literate Population", "Poverty", "Population with at least 1 Social Lack", "Income below Welfare Line"]
+# population = df["Population"]
+# for col in dfs_columns:
+#     #divides the col in dfs_columns by the population column
+#     df[col] = df[col].div(population, axis=0)
+#Creating normalized csv
+# df.to_csv("./DataSets/normalized_data.csv")
+
+
+#cleaning the data from outliers.
+#Outliers are those values above 1. Since the dataset was normalized (1 =100%)
+#Outliers were replaced with zero-values
+# for col in dfs_columns:    
+#     df[col].mask(df[col] >= 1, 0, inplace=True)
 
 
 
@@ -29,8 +85,22 @@ print("This is and example of an interactive cell in VSCode.")
 
 
 
+
+
+
+
+
+
+
+
+
+#==================================================================================
+#===================EXPERIMENTING WITH FINAL DATASET===============================
+#==================================================================================
 
 # %%
+#==================================================================================
+#imports
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
@@ -48,92 +118,85 @@ from matplotlib import pyplot as plt
 
 
 
+
+
+
+
+
 #%%
-dfs = []
-dfs.append(pd.read_csv("./DataSets/total_population.csv"))
-dfs.append(pd.read_csv("./DataSets/Catholic_people.csv"))
-dfs.append(pd.read_csv("./DataSets/foreign_migrant_population.csv"))
-dfs.append(pd.read_csv("./DataSets/has_healthcare.csv"))
-dfs.append(pd.read_csv("./DataSets/higher_education_population.csv"))
-dfs.append(pd.read_csv("./DataSets/indigenous_status.csv"))
-dfs.append(pd.read_csv("./DataSets/literacy_status.csv"))
-dfs.append(pd.read_csv("./DataSets/working_age_population.csv"))
-dfs.append(pd.read_csv("./DataSets/poverty_statistics.csv"))
+#==================================================================================
+#global variables
+#the main dataset, already normalized
+DF = pd.read_csv("./DataSets/normalized_data.csv")
+#A dataset with only the feature columns
+_FEATURE_COLUMNS = DF[["Working Population", "Amount Catholic Population", "Foreign Migrant Population", "Has Healthcare", "Higher Education", "Amount of Indigenous Population", "Amount of Literate Population", "Poverty", "Population with at least 1 Social Lack", "Income below Welfare Line"]]
+#An array string containing the name of the feature columns
+_FEATURE_COLUMNS_NAMES = ["Working Population", "Amount Catholic Population", "Foreign Migrant Population", "Has Healthcare", "Higher Education", "Amount of Indigenous Population", "Amount of Literate Population", "Poverty", "Population with at least 1 Social Lack", "Income below Welfare Line"]
 
 
-#combines all the dfs into a single df
-df = dfs[0]
-for i in range(1,len(dfs)):
-    df = pd.merge(df, dfs[i], on='National Urban System ID', how="left")
 
 
-#delete duplicated columns
+
+
+
+
+
+
 #%%
-df = df.loc[:,~df.columns.duplicated()].copy()
+#==================================================================================
+#functions
+"""
+Plots a box-plot figure and indicates the fence values for the outliers
+@param columns (optional)
+    A dataset consisting of only the features to plot
+    If no parameter is given, the default value is _FEATURE_COLUMNS
+@posconditions
+    A box-plot figure is printed in the interactive window
+"""
+def boxplot(columns=_FEATURE_COLUMNS):   
+    #plotting figure 
+    plt.figure(figsize=(20,20))
+    columns.boxplot()
 
-# df
-df.to_csv("./DataSets/main_dataset.csv")
+    #obtaining limits for the outliers
+    Q1 = columns.quantile(0.25)
+    Q3 = columns.quantile(0.75)
+    IQR = Q3 - Q1
+    Lower_fence = Q1 - (1.5 * IQR)
+    Upper_fence = Q3 + (1.5 *IQR)
 
-
-
-# %%
-# df = pd.read_csv("./DataSets/main_dataset.csv")
-#checking if there are null values: no null values
-# df.isna().sum()
-# df.corr()
-
-
-# %%
-df.hist(figsize=(20,20), bins=5)
-
-# getting relative values
-# these are the columns that will be converted into relative values from the total population of the goegraphical area
-dfs_columns = ["Working Population", "Amount Catholic Population", "Foreign Migrant Population", "Has Healthcare", "Higher Education", "Amount of Indigenous Population", "Amount of Literate Population", "Poverty", "Population with at least 1 Social Lack", "Income below Welfare Line"]
-population = df["Population"]
-for col in dfs_columns:
-    #divides the col in dfs_columns by the populaiton column
-    df[col] = df[col].div(population, axis=0)
-
-
-
-df.to_csv("./DataSets/normalized_data.csv")
+    #printing the ouliers
+    print(Lower_fence)
+    print(Upper_fence)
 
 
+"""
+Plots a histogram figure and indicates the fence values for the outliers
+@param dataset (optional)
+    The version of the data set to print
+    If no parameter is given, the default value is the normalized version DF
 
-
-# %%
-df = pd.read_csv("./DataSets/normalized_data.csv")
-
-
-dfs_columns = df[["Working Population", "Amount Catholic Population", "Foreign Migrant Population", "Has Healthcare", "Higher Education", "Amount of Indigenous Population", "Amount of Literate Population", "Poverty", "Population with at least 1 Social Lack", "Income below Welfare Line"]]
-plt.figure(figsize=(20,20))
-dfs_columns.boxplot()
-
-# %%
-Q1 = dfs_columns.quantile(0.25)
-Q3 = dfs_columns.quantile(0.75)
-IQR = Q3 - Q1
-Lower_fence = Q1 - (1.5 * IQR)
-Upper_fence = Q3 + (1.5 *IQR)
-
-print(Lower_fence)
-print(Upper_fence)
+@posconditions
+    A histogram figure is printed in the interactive window
+"""
+def histogram(dataset=DF):
+    dataset.hist(figsize=(20,20), bins=5)
 
 
 
-# %%
 
-df.corr()
-# %%
-df.hist(figsize=(20,20), bins=5)
 
-# %%
-#cleaning the data from outliers.
-#Outliers are those values above 1. Since the dataset was normalize, 1 =100%
-for col in dfs_columns:
-    
-    df[col].mask(df[col] >= 1, 0, inplace=True)
-df
-# %%
-df.hist(figsize=(20,20), bins=5)
-# %%
+
+
+
+
+
+
+
+#%%
+#==================================================================================
+#code
+boxplot()
+histogram()
+
+
