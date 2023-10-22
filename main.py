@@ -78,7 +78,17 @@
 # for col in dfs_columns:
 #     df[col].mask(df[col] >= 1, 0, inplace=True)
 
+# # %%
 
+# '''Data preparation for classication. '''
+# label = df[['National Urban System ID']]
+# for each in range(len(label)):
+#     label = label.replace(to_replace=r'P.*', value='P', regex=True)
+#     label = label.replace(to_replace=r'C.*', value='C', regex=True)
+#     label = label.replace(to_replace=r'M.*', value='M', regex=True)
+
+# df['National Urban System ID'] = label
+# df.to_csv('./DataSets/normalized_with_labels.csv')
 
 
 
@@ -130,7 +140,7 @@ from sklearn.decomposition import PCA
 #==================================================================================
 #global variables
 #the main dataset, already normalized
-DF = pd.read_csv("./DataSets/normalized_data.csv")
+DF = pd.read_csv("./DataSets/normalized_with_labels.csv")
 #A dataset with only the feature columns
 _FEATURE_COLUMNS = DF[["Working Population", "Amount Catholic Population", "Foreign Migrant Population", "Has Healthcare", "Higher Education", "Amount of Indigenous Population", "Amount of Literate Population", "Poverty", "Population with at least 1 Social Lack", "Income below Welfare Line"]]
 #An array string containing the name of the feature columns
@@ -214,19 +224,5 @@ def principle_component(dataset=_FEATURE_COLUMNS):
 # histogram()
 principle_component()
 
-
-
-# %%
-
-'''Data preparation for classication. '''
-label = DF[['National Urban System ID']]
-for each in range(len(label)):
-    label = label.replace(to_replace=r'P.*', value='P', regex=True)
-    label = label.replace(to_replace=r'C.*', value='C', regex=True)
-    label = label.replace(to_replace=r'M.*', value='M', regex=True)
-
-DF['National Urban System ID'] = label
-print(DF['National Urban System ID'])
-DF.to_csv('./DataSets/normalized_with_labels.csv')
 
 # %%
