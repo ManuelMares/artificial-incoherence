@@ -128,3 +128,12 @@ df.corr()
 df.hist(figsize=(20,20), bins=5)
 
 # %%
+#cleaning the data from outliers.
+#Outliers are those values above 1. Since the dataset was normalize, 1 =100%
+for col in dfs_columns:
+    
+    df[col].mask(df[col] >= 1, 0, inplace=True)
+df
+# %%
+df.hist(figsize=(20,20), bins=5)
+# %%
