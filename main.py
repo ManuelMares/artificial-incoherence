@@ -62,7 +62,7 @@
 #printing a histogram of values
 # df.hist(figsize=(20,20), bins=5)
 
-#Normalizing the values (relative to total population column) 
+#Normalizing the values (relative to total population column)
 # dfs_columns = ["Working Population", "Amount Catholic Population", "Foreign Migrant Population", "Has Healthcare", "Higher Education", "Amount of Indigenous Population", "Amount of Literate Population", "Poverty", "Population with at least 1 Social Lack", "Income below Welfare Line"]
 # population = df["Population"]
 # for col in dfs_columns:
@@ -75,8 +75,20 @@
 #cleaning the data from outliers.
 #Outliers are those values above 1. Since the dataset was normalized (1 =100%)
 #Outliers were replaced with zero-values
-# for col in dfs_columns:    
+# for col in dfs_columns:
 #     df[col].mask(df[col] >= 1, 0, inplace=True)
+
+# # %%
+
+# '''Data preparation for classication. '''
+# label = df[['National Urban System ID']]
+# for each in range(len(label)):
+#     label = label.replace(to_replace=r'P.*', value='P', regex=True)
+#     label = label.replace(to_replace=r'C.*', value='C', regex=True)
+#     label = label.replace(to_replace=r'M.*', value='M', regex=True)
+
+# df['National Urban System ID'] = label
+# df.to_csv('./DataSets/normalized_with_labels.csv')
 
 
 
@@ -104,7 +116,11 @@
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
+<<<<<<< HEAD
 import seaborn as sb 
+=======
+from sklearn.decomposition import PCA
+>>>>>>> a6a9d5b4db49c043d42c317fda801004de035028
 
 #imports for metrics evaluation
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -128,7 +144,7 @@ from sklearn.neighbors import KNeighborsClassifier as KNN
 #==================================================================================
 #global variables
 #the main dataset, already normalized
-DF = pd.read_csv("./DataSets/normalized_data.csv")
+DF = pd.read_csv("./DataSets/normalized_with_labels.csv")
 #A dataset with only the feature columns
 _FEATURE_COLUMNS = DF[["Working Population", "Amount Catholic Population", "Foreign Migrant Population", "Has Healthcare", "Higher Education", "Amount of Indigenous Population", "Amount of Literate Population", "Poverty", "Population with at least 1 Social Lack", "Income below Welfare Line"]]
 #An array string containing the name of the feature columns
@@ -154,8 +170,8 @@ Plots a box-plot figure and indicates the fence values for the outliers
 @posconditions
     A box-plot figure is printed in the interactive window
 """
-def boxplot(columns=_FEATURE_COLUMNS):   
-    #plotting figure 
+def boxplot(columns=_FEATURE_COLUMNS):
+    #plotting figure
     plt.figure(figsize=(20,20))
     columns.boxplot()
 
@@ -166,7 +182,7 @@ def boxplot(columns=_FEATURE_COLUMNS):
     Lower_fence = Q1 - (1.5 * IQR)
     Upper_fence = Q3 + (1.5 *IQR)
 
-    #printing the ouliers
+    #printing the outliers
     print(Lower_fence)
     print(Upper_fence)
 
@@ -278,25 +294,41 @@ def knn(label, dataset=DF):
 def lr(label, dataset=DF):
     X_train, y_train, X_test, y_test = train_test(label=label, dataset=dataset, test_size=0.2)
 
+<<<<<<< HEAD
     lc = LinearRegression()
     lc.fit(X=X_train, y=y_train)
     accuracy = lc.score(X_test, y_test)
     return accuracy
+=======
+'''Plots scatterplots of data features - comparing one to another to visualize correlation.
+@param dataset
+@postcondition
+    Scatter plots of features will be printed in the interactive window'''
+>>>>>>> a6a9d5b4db49c043d42c317fda801004de035028
 
+def principle_component(dataset=_FEATURE_COLUMNS):
 
+    pca = PCA(n_components=2)
+    pca.fit(_FEATURE_COLUMNS)
+    projected = pca.transform(_FEATURE_COLUMNS)
+    projected = pd.DataFrame(projected, columns=['pc1', 'pc2'], index=range(1, 401 + 1))
 
+    projected
+    print(projected)
 
-
-
-
+    plt.figure(figsize=(15,15))
+    plt.xlabel('First Principal Component')
+    plt.ylabel('Second Principal Component')
 
 #%%
 #==================================================================================
 #code
-boxplot()
-histogram()
+# boxplot()
+# histogram()
+principle_component()
 
 
+<<<<<<< HEAD
 
 
 #%%
@@ -327,4 +359,6 @@ print("Test set accuracy: ", accuracy)
 
 # %%
 DF
+=======
+>>>>>>> a6a9d5b4db49c043d42c317fda801004de035028
 # %%
