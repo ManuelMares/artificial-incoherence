@@ -62,7 +62,7 @@
 #printing a histogram of values
 # df.hist(figsize=(20,20), bins=5)
 
-#Normalizing the values (relative to total population column)
+#Normalizing the values (relative to total population column) 
 # dfs_columns = ["Working Population", "Amount Catholic Population", "Foreign Migrant Population", "Has Healthcare", "Higher Education", "Amount of Indigenous Population", "Amount of Literate Population", "Poverty", "Population with at least 1 Social Lack", "Income below Welfare Line"]
 # population = df["Population"]
 # for col in dfs_columns:
@@ -75,20 +75,8 @@
 #cleaning the data from outliers.
 #Outliers are those values above 1. Since the dataset was normalized (1 =100%)
 #Outliers were replaced with zero-values
-# for col in dfs_columns:
+# for col in dfs_columns:    
 #     df[col].mask(df[col] >= 1, 0, inplace=True)
-
-# # %%
-
-# '''Data preparation for classication. '''
-# label = df[['National Urban System ID']]
-# for each in range(len(label)):
-#     label = label.replace(to_replace=r'P.*', value='P', regex=True)
-#     label = label.replace(to_replace=r'C.*', value='C', regex=True)
-#     label = label.replace(to_replace=r'M.*', value='M', regex=True)
-
-# df['National Urban System ID'] = label
-# df.to_csv('./DataSets/normalized_with_labels.csv')
 
 
 
@@ -116,11 +104,8 @@
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
-<<<<<<< HEAD
-import seaborn as sb 
-=======
 from sklearn.decomposition import PCA
->>>>>>> a6a9d5b4db49c043d42c317fda801004de035028
+import seaborn as sb 
 
 #imports for metrics evaluation
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -294,17 +279,14 @@ def knn(label, dataset=DF):
 def lr(label, dataset=DF):
     X_train, y_train, X_test, y_test = train_test(label=label, dataset=dataset, test_size=0.2)
 
-<<<<<<< HEAD
     lc = LinearRegression()
     lc.fit(X=X_train, y=y_train)
     accuracy = lc.score(X_test, y_test)
     return accuracy
-=======
 '''Plots scatterplots of data features - comparing one to another to visualize correlation.
 @param dataset
 @postcondition
     Scatter plots of features will be printed in the interactive window'''
->>>>>>> a6a9d5b4db49c043d42c317fda801004de035028
 
 def principle_component(dataset=_FEATURE_COLUMNS):
 
@@ -328,7 +310,6 @@ def principle_component(dataset=_FEATURE_COLUMNS):
 principle_component()
 
 
-<<<<<<< HEAD
 
 
 #%%
@@ -349,7 +330,7 @@ df_higher_education = df_higher_education.loc[:, df_higher_education.columns != 
 accuracy = lr(label = "Higher Education", dataset=df_higher_education)
 print("Test set accuracy: ", accuracy)
 
-# df_higher_education = df_higher_education.loc[:, df_higher_education.columns != "Income below Welfare Line"]
+df_higher_education = df_higher_education.loc[:, df_higher_education.columns != "Income below Welfare Line"]
 # df_higher_education = df_higher_education.loc[:, df_higher_education.columns != "Population with at least 1 Social Lack"]
 accuracy = lr(label = "Poverty", dataset=df_higher_education)
 print("Test set accuracy: ", accuracy)
@@ -359,6 +340,4 @@ print("Test set accuracy: ", accuracy)
 
 # %%
 DF
-=======
->>>>>>> a6a9d5b4db49c043d42c317fda801004de035028
 # %%
