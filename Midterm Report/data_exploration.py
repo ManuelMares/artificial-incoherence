@@ -33,16 +33,6 @@ print("This is and example of an interactive cell in VSCode.")
 # %%
 import pandas as pd
 
-
-
-
-
-
-
-
-
-
-
 #%%
 #exploring religion_status
 df = pd.read_csv("./SourceDataSets/religion_status.csv")

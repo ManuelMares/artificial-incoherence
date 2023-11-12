@@ -72,3 +72,4 @@ aggregated_healthcare = aggregated_healthcare.rename(columns={'Population': "Has
 aggregated_healthcare.to_csv('./DataSets/has_healthcare.csv')
 
 # %%
+
