@@ -1,2 +1,4 @@
 *.csv filter=lfs diff=lfs merge=lfs -text
 DataSets/** filter=lfs diff=lfs merge=lfs -text
+FinalReport/*.csv filter=lfs diff=lfs merge=lfs -text
+Midterm[[:space:]]Report/*.csv filter=lfs diff=lfs merge=lfs -text
