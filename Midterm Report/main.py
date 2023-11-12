@@ -292,7 +292,6 @@ def lr(label, dataset=DF):
     lc.fit(X=X_train, y=y_train)
     accuracy = lc.score(X_test, y_test)
     return accuracy
-<<<<<<< HEAD:Midterm Report/main.py
 
 def gradientBoost(label, dataset=DF):
     X_train, y_train, X_test, y_test = train_test(label=label, dataset=dataset, test_size=0.2)
@@ -306,9 +305,6 @@ def gradientBoost(label, dataset=DF):
 
 
 '''Plots scatterplots of data features - comparing one to another to visualize correlation.
-=======
-'''Plots Principal Component Analysis
->>>>>>> bff6aecf10e05ae67f1dfb7dd242039aa41ade84:main.py
 @param dataset
 @postcondition
     '''
@@ -367,7 +363,6 @@ print("Test set accuracy: ", accuracy)
 # accuracy = lr(label = "Poverty", dataset=df_higher_education)
 # print("Test set accuracy: ", accuracy)
 
-<<<<<<< HEAD:Midterm Report/main.py
 
 # %%
 plt.plot(DF["National Urban System ID"], DF["Higher Education"])
@@ -389,8 +384,6 @@ plt.show()
 
 
 
-=======
->>>>>>> bff6aecf10e05ae67f1dfb7dd242039aa41ade84:main.py
 # %%
 #==========================================================================================================================
 #gradientBoost to predict higher education
