@@ -116,6 +116,7 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.linear_model import LinearRegression
 # from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier as KNN
+from sklearn.ensemble import GradientBoostingRegressor
 # from sklearn.svm import SVC
 
 
@@ -283,6 +284,18 @@ def lr(label, dataset=DF):
     lc.fit(X=X_train, y=y_train)
     accuracy = lc.score(X_test, y_test)
     return accuracy
+
+def gradientBoost(label, dataset=DF):
+    X_train, y_train, X_test, y_test = train_test(label=label, dataset=dataset, test_size=0.2)
+
+    gbr = GradientBoostingRegressor(
+    )
+
+    gbr.fit(X=X_train, y=y_train)
+    accuracy = gbr.score(X_test, y_test)
+    return accuracy
+
+
 '''Plots scatterplots of data features - comparing one to another to visualize correlation.
 @param dataset
 @postcondition
@@ -301,6 +314,8 @@ def principle_component(dataset=_FEATURE_COLUMNS):
     plt.figure(figsize=(15,15))
     plt.xlabel('First Principal Component')
     plt.ylabel('Second Principal Component')
+
+
 
 #%%
 #==================================================================================
@@ -339,5 +354,39 @@ print("Test set accuracy: ", accuracy)
 
 
 # %%
-DF
+plt.plot(DF["National Urban System ID"], DF["Higher Education"])
+
+plt.ylabel("National Urban System ID")
+plt.xlabel("Higher Education")
+
+plt.show()
+
 # %%
+plt.plot(DF["National Urban System ID"], DF["Poverty"])
+
+plt.ylabel("National Urban System ID")
+plt.xlabel("Poverty")
+
+plt.show()
+
+
+
+
+
+# %%
+#==========================================================================================================================
+#gradientBoost to predict higher education
+df_higher_education = DF
+df_higher_education = df_higher_education.loc[:, df_higher_education.columns != "National Urban System_x"]
+df_higher_education = df_higher_education.loc[:, df_higher_education.columns != "National Urban System ID"]
+
+# accuracy = knn(label = "Higher Education", dataset=df_higher_education)
+accuracy = gradientBoost(label = "Higher Education", dataset=df_higher_education)
+print("Test set accuracy: ", accuracy)
+
+df_poverty_status = df_higher_education.loc[:, df_higher_education.columns != "Income below Welfare Line"]
+# df_higher_education = df_higher_education.loc[:, df_higher_education.columns != "Population with at least 1 Social Lack"]
+accuracy = lr(label = "Poverty", dataset=df_poverty_status)
+print("Test set accuracy: ", accuracy)
+ 
+#==========================================================================================================================
