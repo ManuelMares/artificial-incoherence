@@ -24,7 +24,7 @@ from sklearn.preprocessing import LabelEncoder
 
 
 #%%
-df = pd.read_csv("./data/Academic Degree Population.csv")
+df = pd.read_csv("./Final Report/NewDataSets/SourceDataSets/indigenous_2020.csv")
 print(df.head)
 highEdDf = df[df["Academic Degree ID"] > 5]
 highEdDf = highEdDf[highEdDf["Academic Degree ID"] < 99]
