@@ -160,11 +160,15 @@ df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
 
 #Normalizing the data
+#Changing NaN for 0
+#Deleting outliers
+cols_to_normalize = ["indigenous", "literacy", "Poverty", "higher_education", "healthcare", "age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]
 population = df["population"]
-for col in colNames:
+for col in cols_to_normalize:
     #divides the col in dfs_columns by the population column
     df[col] = df[col].div(population, axis=0)
     df[col] = df[col].fillna(0)
+    df[col].mask(df[col] >= 1, 0, inplace=True)
 
 
 #Encoding the population
