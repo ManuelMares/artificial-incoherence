@@ -19,7 +19,7 @@ df_age_60_75_2015           = pd.read_csv("./NewDataSets/SourceDataSets/age_60_7
 
 
 df1 =  df_indigenous_2015[df_indigenous_2015["Indigenous Self Abscribing"] == "Yes"]
-df2 =  df_literacy_2015[df_literacy_2015["Literate"] == "Yes"] 
+df2 =  df_literacy_2015[df_literacy_2015["Literate"] == "Yes"]
 df1 =  df1[                       ["Municipality ID", "Population"]]
 df2 =  df2[                       ["Municipality ID", "Population"]]
 df3 =  df_population_2015[        ["Municipality ID", "Population"]]
@@ -80,7 +80,7 @@ df_age_60_75_2020           = pd.read_csv("./NewDataSets/SourceDataSets/age_60_7
 
 
 df1  = df_indigenous_2020[df_indigenous_2020["Indigenous Self Abscribing"] == "Yes"]
-df2  = df_literacy_2020[df_literacy_2020["Literate"] == "Yes"] 
+df2  = df_literacy_2020[df_literacy_2020["Literate"] == "Yes"]
 
 df1  = df1[                      ["Municipality ID", "Population"]]
 df2  = df2[                      ["Municipality ID", "Population"]]
@@ -133,16 +133,6 @@ df_2020.to_csv("df_2020.csv")
 
 
 
-
-
-
-
-
-
-
-
-
-
 # %%
 #Cleaning the data
 import pandas as pd
@@ -165,6 +155,8 @@ for col in colNames:
     #divides the col in dfs_columns by the population column
     df[col] = df[col].div(population, axis=0)
     df[col] = df[col].fillna(0)
+    
+df["population"] = population
 
 
 #Encoding the population
