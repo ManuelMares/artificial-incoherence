@@ -42,7 +42,7 @@ df_age_45_59_2020    = pd.read_csv("./NewDataSets/SourceDataSets/age_45_59_2020.
 
 df1 = df_indigenous_2015[df_indigenous_2015["Indigenous Self Abscribing"] == "Yes"]
 df1 = df1[["Municipality", "Population"]]
-df2 = df_literacy_2015[df_literacy_2015["Literate"] == "Yes"] 
+df2 = df_literacy_2015[df_literacy_2015["Literate"] == "Yes"]
 df2 = df2[["Municipality", "Population"]]
 df3 = df_population_2015[["Municipality", "Population"]]
 df4 = df_poverty_2015[["Municipality", "Poverty"]]
