@@ -63,8 +63,6 @@ df_2015.to_csv("df_2015.csv")
 
 
 
-# %%
-
 df_indigenous_2020          = pd.read_csv("./NewDataSets/SourceDataSets/indigenous_2020.csv")
 df_literacy_2020            = pd.read_csv("./NewDataSets/SourceDataSets/literacy_2020.csv")
 df_population_2020          = pd.read_csv("./NewDataSets/SourceDataSets/population_2020.csv")
@@ -97,19 +95,6 @@ df10 = df_age_30_44_2020[        ["Municipality ID", "Population"]]
 df11 = df_age_45_59_2020[        ["Municipality ID", "Population"]]
 df12 = df_age_60_75_2020[        ["Municipality ID", "Population"]]
 
-
-print(len(df1))
-print(len(df2))
-print(len(df3))
-print(len(df4))
-print(len(df5))
-print(len(df6))
-print(len(df7))
-print(len(df8))
-print(len(df9))
-print(len(df10))
-print(len(df11))
-print(len(df12))
 
 
 df1 =   df1.rename(columns  = {"Population":  "indigenous"})
@@ -152,11 +137,6 @@ df_2020.to_csv("df_2020.csv")
 
 
 
-# %%
-print(len(df_2015))
-print(len(df_2020))
-
-
 
 # %%
 import pandas as pd
@@ -168,13 +148,17 @@ df = pd.concat([df_2015, df_2020])
 df.drop("Municipality ID", axis=1)
 df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
+
 colNames = ["population", "indigenous", "literacy", "Poverty", "higher_education", "healthcare", "age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic",	"foreign_migrant"]
 df = df[colNames]
+df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+label_population = pd.cut(x=df["population"], bins=[0,1000,100000,250000,1000000,5000000], labels = [1, 2, 3, 4, 5 ])
 
-print(len(df_2015))
-print(len(df_2020))
 
-# %%
 
+df["population"] = label_population
+df
+
+#%%
 df.to_csv("final.csv")
 # %%
