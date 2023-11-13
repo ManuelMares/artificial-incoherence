@@ -138,27 +138,43 @@ df_2020.to_csv("df_2020.csv")
 
 
 
+
+
+
+
+
 # %%
+#Cleaning the data
 import pandas as pd
-df_2015 = pd.read_csv("./df_2015.csv")
-df_2020 = pd.read_csv("./df_2020.csv")
+df_2015 = pd.read_csv("./NewDataSets/SourceDataSets/df_2015.csv")
+df_2020 = pd.read_csv("./NewDataSets/SourceDataSets/df_2020.csv")
 
 
 df = pd.concat([df_2015, df_2020])
 df.drop("Municipality ID", axis=1)
 df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
-
-colNames = ["population", "indigenous", "literacy", "Poverty", "higher_education", "healthcare", "age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic",	"foreign_migrant"]
+colNames = ["population", "indigenous", "literacy", "Poverty", "higher_education", "healthcare", "age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]
 df = df[colNames]
 df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+
+
+#Normalizing the data
+population = df["population"]
+for col in colNames:
+    #divides the col in dfs_columns by the population column
+    df[col] = df[col].div(population, axis=0)
+    df[col] = df[col].fillna(0)
+
+
+#Encoding the population
 label_population = pd.cut(x=df["population"], bins=[0,1000,100000,250000,1000000,5000000], labels = [1, 2, 3, 4, 5 ])
-
-
-
 df["population"] = label_population
+
+
+df.to_csv("df_normalized.csv")
 df
 
-#%%
-df.to_csv("final.csv")
+
+
 # %%
