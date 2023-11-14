@@ -365,4 +365,63 @@ print(f"The best average was {bestAverage_dbscan} with a value of k={bestK_dbsca
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # %%
+from sklearn.naive_bayes import BernoulliNB
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.linear_model import SGDClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import time
+import concurrent.futures
+from sklearn.datasets import make_classification
+
+X, y = make_classification(n_samples=10_000)
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
+
+if __name__ == '__main__':
+
+    start = time.perf_counter()
+
+    algo_name = [BernoulliNB, RandomForestClassifier, SVC, SGDClassifier]
+
+    def train(algo_name) :
+        model = algo_name().fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        print(model, accuracy_score(y_test, y_pred))
+
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        executor.map(train, algo_name)
+
+    end = time.perf_counter()
+    print(f'Program runtime is {round((end - start) * 1000 , 2)} ms')
