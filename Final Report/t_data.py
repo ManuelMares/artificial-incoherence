@@ -146,7 +146,7 @@ def KMeansClustering():
     kmeans = KMeans(n_clusters=9, random_state=42, n_init=10, max_iter=5)
     kmeans.fit_transform(DF)
     centroids = kmeans.cluster_centers_
-    print("These are the centroids: ", centroids)
+    #print("These are the centroids: ", centroids)
 
     #Reduce the dimensions in order to plot the figure of kmeans model
     pca = PCA(n_components=2)
@@ -166,33 +166,33 @@ def KMeansClustering():
     # plt.legend(targets, loc='lower right')
     # plt.savefig('./KMeansClustering')
 
-    # X_train_pca = pca.fit_transform(DF)
+    X_train_pca = pca.fit_transform(DF)
 
     label = kmeans.fit_predict(DF)
-    # data = {
-    #     'label': label,
-    #     'pca1' : X_train_pca[:,0],
-    #     'pca2' : X_train_pca[:,1],
-    # }
-    # clusters = pd.DataFrame(data)
-    # unique_categories = [x for x in range(len(DF))]
-    # colors = plt.cm.tab20.colors[:len(unique_categories)]
+    data = {
+        'label': label,
+        'pca1' : X_train_pca[:,0],
+        'pca2' : X_train_pca[:,1],
+    }
+    clusters = pd.DataFrame(data)
+    unique_categories = [x for x in range(len(DF))]
+    colors = plt.cm.tab20.colors[:len(unique_categories)]
 
-    # for i, category in enumerate(unique_categories):
-    #     plt.scatter(clusters[clusters['label'] == category]['pca1'],
-    #                 clusters[clusters['label'] == category]['pca2'],
-    #                 label=category,
-    #                 color=colors[i],
-    #                 alpha=0.7)
-    # plt.legend()
-    # plt.xlabel('PCA1')
-    # plt.ylabel('PCA2')
-    # plt.title('Scatter plot for the K-means model')
-    # plt.show()
+    for i, category in enumerate(unique_categories):
+        plt.scatter(clusters[clusters['label'] == category]['pca1'],
+                    clusters[clusters['label'] == category]['pca2'],
+                    label=category,
+                    color=colors[i],
+                    alpha=0.7)
+    plt.legend()
+    plt.xlabel('PCA1')
+    plt.ylabel('PCA2')
+    plt.title('Scatter plot for the K-means model')
+    plt.show()
 
-    df = copy.deepcopy(DF)
-    df['labels'] = label
-    tsne(df)
+    # df = copy.deepcopy(DF)
+    # df['labels'] = label
+    # tsne(df)
 # %%
 KMeansClustering()
 
@@ -214,29 +214,29 @@ def dbscan():
     # # plt.scatter(DF.iloc[:, 0], DF.iloc[:,1], c=y_pred, cmap='Paired')
     # # plt.title("DBSCAN")
 
-    # pca = PCA(n_components=2)
-    # X_train_pca = pca.fit_transform(DF)
+    pca = PCA(n_components=2)
+    X_train_pca = pca.fit_transform(DF)
 
-    # label = db.fit_predict(DF)
-    # data = {
-    #     'label': label,
-    #     'pca1' : X_train_pca[:,0],
-    #     'pca2' : X_train_pca[:,1],
-    # }
-    # clusters = pd.DataFrame(data)
-    # unique_categories = [x for x in range(len(DF))]
-    # colors = plt.cm.tab20.colors[:len(unique_categories)]
+    label = db.fit_predict(DF)
+    data = {
+        'label': label,
+        'pca1' : X_train_pca[:,0],
+        'pca2' : X_train_pca[:,1],
+    }
+    clusters = pd.DataFrame(data)
+    unique_categories = [x for x in range(len(DF))]
+    colors = plt.cm.tab20.colors[:len(unique_categories)]
 
-    # for i, category in enumerate(unique_categories):
-    #     plt.scatter(clusters[clusters['label'] == category]['pca1'],
-    #                 clusters[clusters['label'] == category]['pca2'],
-    #                 label=category,
-    #                 color=colors[i],
-    #                 alpha=0.7)
+    for i, category in enumerate(unique_categories):
+        plt.scatter(clusters[clusters['label'] == category]['pca1'],
+                    clusters[clusters['label'] == category]['pca2'],
+                    label=category,
+                    color=colors[i],
+                    alpha=0.7)
 
-    df = copy.deepcopy(DF)
-    df['labels'] = labels
-    tsne(df)
+    # df = copy.deepcopy(DF)
+    # df['labels'] = labels
+    # tsne(df)
 
 
 # %%
@@ -244,7 +244,7 @@ dbscan()
 
 # %%
 def hier():
-    hier = AgglomerativeClustering(n_clusters=4)
+    hier = AgglomerativeClustering(n_clusters=9)
     y_pred = hier.fit_predict(DF)
     # plt.scatter(DF.iloc[:,0], DF.iloc[:,1],c=y_pred, cmap='Paired')
     # plt.legend()
@@ -269,6 +269,10 @@ def hier():
                     label=category,
                     color=colors[i],
                     alpha=0.7)
+
+    # df = copy.deepcopy(DF)
+    # df['labels'] = y_pred
+    # tsne(df)
 # %%
 hier()
 
@@ -285,6 +289,8 @@ def tsne(df):
     df["x_component"] = ts_embed[:,0]
     df["y_component"] = ts_embed[:,1]
     fig = px.scatter(df, x="x_component", y="y_component",
-                     hover_name="population", color="labels", size_max=60)
+                     hover_name="population", color="population", size_max=60)
     fig.update_layout(height=800)
     fig.show()
+
+# %%
