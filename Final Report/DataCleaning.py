@@ -178,6 +178,6 @@ df
 # df_2020 = normalize_dataset(df_2020)
 # df_2020.to_csv("2020_normalized.csv")
 
-# df_2015 = pd.read_csv("./NewDataSets/SourceDataSets\df_2020.csv")
-# df_2015 = normalize_dataset(df_2015)
-# df_2015.to_csv("2015_normalized.csv")
+df_2015 = pd.read_csv("./NewDataSets/SourceDataSets\df_2015.csv")
+df_2015 = normalize_dataset(df_2015)
+df_2015.to_csv("2015_normalized.csv")

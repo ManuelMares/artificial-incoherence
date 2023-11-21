@@ -17,8 +17,9 @@ from sklearn.cluster import DBSCAN, AgglomerativeClustering, KMeans, SpectralClu
 from sklearn.manifold import TSNE
 
 #%%
-DF = pd.read_csv("./df_normalized.csv")
-_FEATURE_COLUMNS = DF[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]]
+DF = pd.read_csv("./2020_normalized.csv")
+#_FEATURE_COLUMNS_2015 = DF[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75"]]
+_FEATURE_COLUMNS_2020 = DF[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]]
 
 
 #%%
@@ -60,8 +61,10 @@ def normalize_dataset(df):
     df["population"] = label_population
 
     return df
-
-
+#%%
+df_2015 = pd.read_csv("./NewDataSets/SourceDataSets/df_2015.csv")
+df_2015 = normalize_dataset(df_2015)
+df_2015.to_csv("2015_normalized.csv")
 
 #%%
 """
@@ -72,7 +75,7 @@ Plots a box-plot figure and indicates the fence values for the outliers
 @posconditions
     A box-plot figure is printed in the interactive window
 """
-def boxplot(columns=_FEATURE_COLUMNS):
+def boxplot(columns=_FEATURE_COLUMNS_2020):
     #plotting figure
     plt.figure(figsize=(20,20))
     columns.boxplot()
@@ -151,7 +154,7 @@ def KMeansClustering(df = DF):
         a data frame
     """
      #Fit the best silhouette average into a kmeans model
-    kmeans = KMeans(n_clusters=9, random_state=42, n_init=10, max_iter=5)
+    kmeans = KMeans(n_clusters=6, random_state=42, n_init=10, max_iter=5)
     kmeans.fit_transform(df)
     centroids = kmeans.cluster_centers_
     label = kmeans.fit_predict(df)
@@ -211,7 +214,17 @@ def tsne(df):
 
 # %%
 def para_coordinates(df = DF):
-    _FEATURE_COLUMNS = df[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]]
+    _FEATURE_COLUMNS_2020 = df[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]]
     col = df[["population", "indigenous", "higher_education"]]
     plt.figure(figsize=(20,20))
     parallel_coordinates(df, 'population')
+
+#%%
+KMeansClustering()
+hier()
+dbscan()
+para_coordinates()
+
+
+
+# %%

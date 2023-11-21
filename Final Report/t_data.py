@@ -24,8 +24,8 @@ from sklearn.cluster import DBSCAN, AgglomerativeClustering, KMeans, SpectralClu
 # from sklearn.svm import SVC
 
 #%%
-DF = pd.read_csv("./df_normalized.csv")
-_FEATURE_COLUMNS = DF[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]]
+DF = pd.read_csv("./df_2015_normalized.csv")
+_FEATURE_COLUMNS = DF[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75"]]
 
 #%%
 """
@@ -144,7 +144,7 @@ def KMeansClustering():
     # print("The best K-value is 20.")
 
     #Fit the best silhouette average into a kmeans model
-    kmeans = KMeans(n_clusters=9, random_state=42, n_init=10, max_iter=5)
+    kmeans = KMeans(n_clusters=6, random_state=42, n_init=10, max_iter=5)
     kmeans.fit_transform(DF)
     centroids = kmeans.cluster_centers_
     #print("These are the centroids: ", centroids)
@@ -153,47 +153,47 @@ def KMeansClustering():
     pca = PCA(n_components=2)
     pca.fit(centroids)
     projected = pca.transform(centroids)
-    projected = pd.DataFrame(projected, columns=['pc1', 'pc2'], index=range(1, 9 + 1))
-    projected['clusterID'] = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+    projected = pd.DataFrame(projected, columns=['pc1', 'pc2'], index=range(1, 6 + 1))
+    projected['clusterID'] = ['1', '2', '3', '4', '5', '6']
 
 
-    # plt.figure(figsize=(15,15))
-    # plt.xlabel('First Principal Component')
-    # plt.ylabel('Second Principal Component')
-    # targets = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-    # for target in targets:
-    #     d = projected[projected['clusterID'] == target]
-    #     plt.scatter(d['pc1'], d['pc2'], s=50)
-    # plt.legend(targets, loc='lower right')
-    # plt.savefig('./KMeansClustering')
+    plt.figure(figsize=(15,15))
+    plt.xlabel('First Principal Component')
+    plt.ylabel('Second Principal Component')
+    targets = ['1', '2', '3', '4', '5', '6']
+    for target in targets:
+        d = projected[projected['clusterID'] == target]
+        plt.scatter(d['pc1'], d['pc2'], s=50)
+    plt.legend(targets, loc='lower right')
+    plt.savefig('./KMeansClustering')
 
-    # X_train_pca = pca.fit_transform(DF)
+    X_train_pca = pca.fit_transform(DF)
 
     label = kmeans.fit_predict(DF)
-    # data = {
-    #     'label': label,
-    #     'pca1' : X_train_pca[:,0],
-    #     'pca2' : X_train_pca[:,1],
-    # }
-    # clusters = pd.DataFrame(data)
-    # unique_categories = [x for x in range(len(DF))]
-    # colors = plt.cm.tab20.colors[:len(unique_categories)]
+    data = {
+        'label': label,
+        'pca1' : X_train_pca[:,0],
+        'pca2' : X_train_pca[:,1],
+    }
+    clusters = pd.DataFrame(data)
+    unique_categories = [x for x in range(len(DF))]
+    colors = plt.cm.tab20.colors[:len(unique_categories)]
 
-    # for i, category in enumerate(unique_categories):
-    #     plt.scatter(clusters[clusters['label'] == category]['pca1'],
-    #                 clusters[clusters['label'] == category]['pca2'],
-    #                 label=category,
-    #                 color=colors[i],
-    #                 alpha=0.7)
-    # plt.legend()
-    # plt.xlabel('PCA1')
-    # plt.ylabel('PCA2')
-    # plt.title('Scatter plot for the K-means model')
-    # plt.show()
+    for i, category in enumerate(unique_categories):
+        plt.scatter(clusters[clusters['label'] == category]['pca1'],
+                    clusters[clusters['label'] == category]['pca2'],
+                    label=category,
+                    color=colors[i],
+                    alpha=0.7)
+    plt.legend()
+    plt.xlabel('PCA1')
+    plt.ylabel('PCA2')
+    plt.title('Scatter plot for the K-means model')
+    plt.show()
 
-    df = copy.deepcopy(DF)
-    df['labels'] = label
-    tsne(df)
+    # df = copy.deepcopy(DF)
+    # df['labels'] = label
+    # tsne(df)
 # %%
 KMeansClustering()
 
@@ -201,12 +201,12 @@ KMeansClustering()
 def dbscan():
     db = DBSCAN(eps=0.3, min_samples=10)
     clusters = db.fit(DF)
-    silhouette = silhouette_score(DF, clusters.labels_)
-    print("Silhouette coefficient for DBSCAN: ", silhouette)
+    # silhouette = silhouette_score(DF, clusters.labels_)
+    # print("Silhouette coefficient for DBSCAN: ", silhouette)
 
     labels = clusters.labels_
-    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-    n_noise = list(labels).count(-1)
+    # n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+    # n_noise = list(labels).count(-1)
     print(labels)
     # print("Estimated number of clusters: %d" % n_clusters)
     # print("Estimated number of noise points: %d" % n_noise)
@@ -239,9 +239,6 @@ def dbscan():
     df['labels'] = labels
     tsne(df)
 
-
-
-
 # %%
 def hier():
     hier = AgglomerativeClustering(n_clusters=9)
@@ -250,29 +247,29 @@ def hier():
     # plt.legend()
     # plt.title("Hierarchical")
 
-    pca = PCA(n_components=2)
-    X_train_pca = pca.fit_transform(DF)
+    # pca = PCA(n_components=2)
+    # X_train_pca = pca.fit_transform(DF)
 
     label = hier.fit_predict(DF)
-    data = {
-        'label': label,
-        'pca1' : X_train_pca[:,0],
-        'pca2' : X_train_pca[:,1],
-    }
-    clusters = pd.DataFrame(data)
-    unique_categories = [x for x in range(len(DF))]
-    colors = plt.cm.tab20.colors[:len(unique_categories)]
+    # data = {
+    #     'label': label,
+    #     'pca1' : X_train_pca[:,0],
+    #     'pca2' : X_train_pca[:,1],
+    # }
+    # clusters = pd.DataFrame(data)
+    # unique_categories = [x for x in range(len(DF))]
+    # colors = plt.cm.tab20.colors[:len(unique_categories)]
 
-    for i, category in enumerate(unique_categories):
-        plt.scatter(clusters[clusters['label'] == category]['pca1'],
-                    clusters[clusters['label'] == category]['pca2'],
-                    label=category,
-                    color=colors[i],
-                    alpha=0.7)
+    # for i, category in enumerate(unique_categories):
+    #     plt.scatter(clusters[clusters['label'] == category]['pca1'],
+    #                 clusters[clusters['label'] == category]['pca2'],
+    #                 label=category,
+    #                 color=colors[i],
+    #                 alpha=0.7)
 
-    # df = copy.deepcopy(DF)
-    # df['labels'] = y_pred
-    # tsne(df)
+    df = copy.deepcopy(DF)
+    df['labels'] = y_pred
+    tsne(df)
 # %%
 hier()
 
@@ -285,20 +282,24 @@ import plotly.express as px
     @postcondition: Plot of multidimensional data onto 2-D.
 '''
 def tsne(df):
+    col = ["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75"]
     ts_embed = TSNE(n_components=2).fit_transform(df)
     df["x_component"] = ts_embed[:,0]
     df["y_component"] = ts_embed[:,1]
-    fig = px.scatter(df, x="x_component", y="y_component",
-                     hover_name="population", color="indigenous", size_max=60)
-    fig.update_layout(height=800)
-    fig.show()
+    for each in col:
+        fig = px.scatter(df, x="x_component", y="y_component",
+                         hover_name="population", color=each, size_max=60)
+        fig.update_layout(height=800)
+        fig.show()
 
 # %%
-dbscan()
-# %%
-_FEATURE_COLUMNS = DF[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]]
+_FEATURE_COLUMNS = DF[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75"]]
 col = DF[["population", "indigenous", "higher_education"]]
 plt.figure(figsize=(20,20))
 parallel_coordinates(DF, 'population')
+
+# %%
+
+dbscan()
 
 # %%
