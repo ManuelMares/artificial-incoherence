@@ -8,6 +8,7 @@ from sklearn import metrics
 from sklearn.decomposition import PCA
 import seaborn as sb
 from sklearn.metrics import silhouette_score
+from pandas.plotting import parallel_coordinates
 
 #imports for metrics evaluation
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -166,33 +167,33 @@ def KMeansClustering():
     # plt.legend(targets, loc='lower right')
     # plt.savefig('./KMeansClustering')
 
-    X_train_pca = pca.fit_transform(DF)
+    # X_train_pca = pca.fit_transform(DF)
 
     label = kmeans.fit_predict(DF)
-    data = {
-        'label': label,
-        'pca1' : X_train_pca[:,0],
-        'pca2' : X_train_pca[:,1],
-    }
-    clusters = pd.DataFrame(data)
-    unique_categories = [x for x in range(len(DF))]
-    colors = plt.cm.tab20.colors[:len(unique_categories)]
+    # data = {
+    #     'label': label,
+    #     'pca1' : X_train_pca[:,0],
+    #     'pca2' : X_train_pca[:,1],
+    # }
+    # clusters = pd.DataFrame(data)
+    # unique_categories = [x for x in range(len(DF))]
+    # colors = plt.cm.tab20.colors[:len(unique_categories)]
 
-    for i, category in enumerate(unique_categories):
-        plt.scatter(clusters[clusters['label'] == category]['pca1'],
-                    clusters[clusters['label'] == category]['pca2'],
-                    label=category,
-                    color=colors[i],
-                    alpha=0.7)
-    plt.legend()
-    plt.xlabel('PCA1')
-    plt.ylabel('PCA2')
-    plt.title('Scatter plot for the K-means model')
-    plt.show()
+    # for i, category in enumerate(unique_categories):
+    #     plt.scatter(clusters[clusters['label'] == category]['pca1'],
+    #                 clusters[clusters['label'] == category]['pca2'],
+    #                 label=category,
+    #                 color=colors[i],
+    #                 alpha=0.7)
+    # plt.legend()
+    # plt.xlabel('PCA1')
+    # plt.ylabel('PCA2')
+    # plt.title('Scatter plot for the K-means model')
+    # plt.show()
 
-    # df = copy.deepcopy(DF)
-    # df['labels'] = label
-    # tsne(df)
+    df = copy.deepcopy(DF)
+    df['labels'] = label
+    tsne(df)
 # %%
 KMeansClustering()
 
@@ -214,33 +215,32 @@ def dbscan():
     # # plt.scatter(DF.iloc[:, 0], DF.iloc[:,1], c=y_pred, cmap='Paired')
     # # plt.title("DBSCAN")
 
-    pca = PCA(n_components=2)
-    X_train_pca = pca.fit_transform(DF)
+    # pca = PCA(n_components=2)
+    # X_train_pca = pca.fit_transform(DF)
 
-    label = db.fit_predict(DF)
-    data = {
-        'label': label,
-        'pca1' : X_train_pca[:,0],
-        'pca2' : X_train_pca[:,1],
-    }
-    clusters = pd.DataFrame(data)
-    unique_categories = [x for x in range(len(DF))]
-    colors = plt.cm.tab20.colors[:len(unique_categories)]
+    #labels = db.fit_predict(DF)
+    # data = {
+    #     'label': label,
+    #     'pca1' : X_train_pca[:,0],
+    #     'pca2' : X_train_pca[:,1],
+    # }
+    # clusters = pd.DataFrame(data)
+    # unique_categories = [x for x in range(len(DF))]
+    # colors = plt.cm.tab20.colors[:len(unique_categories)]
 
-    for i, category in enumerate(unique_categories):
-        plt.scatter(clusters[clusters['label'] == category]['pca1'],
-                    clusters[clusters['label'] == category]['pca2'],
-                    label=category,
-                    color=colors[i],
-                    alpha=0.7)
+    # for i, category in enumerate(unique_categories):
+    #     plt.scatter(clusters[clusters['label'] == category]['pca1'],
+    #                 clusters[clusters['label'] == category]['pca2'],
+    #                 label=category,
+    #                 color=colors[i],
+    #                 alpha=0.7)
 
-    # df = copy.deepcopy(DF)
-    # df['labels'] = labels
-    # tsne(df)
+    df = copy.deepcopy(DF)
+    df['labels'] = labels
+    tsne(df)
 
 
-# %%
-dbscan()
+
 
 # %%
 def hier():
@@ -289,8 +289,16 @@ def tsne(df):
     df["x_component"] = ts_embed[:,0]
     df["y_component"] = ts_embed[:,1]
     fig = px.scatter(df, x="x_component", y="y_component",
-                     hover_name="population", color="population", size_max=60)
+                     hover_name="population", color="indigenous", size_max=60)
     fig.update_layout(height=800)
     fig.show()
+
+# %%
+dbscan()
+# %%
+_FEATURE_COLUMNS = DF[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]]
+col = DF[["population", "indigenous", "higher_education"]]
+plt.figure(figsize=(20,20))
+parallel_coordinates(DF, 'population')
 
 # %%
