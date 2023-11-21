@@ -20,6 +20,49 @@ from sklearn.manifold import TSNE
 DF = pd.read_csv("./df_normalized.csv")
 _FEATURE_COLUMNS = DF[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]]
 
+
+#%%
+
+def normalize_dataset(df):
+    """
+        This method:
+            drops the Municipality column
+            encodes the population column
+            normalizes all the columns by obtaining a relative value to the total population
+            gets rid of outliers
+        @param df
+            The dataset to clean
+        @return
+            A normalized dataset
+    """
+    df.drop("Municipality ID", axis=1)
+    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+
+    colNames = ["population", "indigenous", "literacy", "Poverty", "higher_education", "healthcare", "age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]
+    df = df[colNames]
+    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+
+
+    #Normalizing the data
+    #Changing NaN for 0
+    #Deleting outliers
+    cols_to_normalize = ["indigenous", "literacy", "Poverty", "higher_education", "healthcare", "age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]
+    population = df["population"]
+    for col in cols_to_normalize:
+        #divides the col in dfs_columns by the population column
+        df[col] = df[col].div(population, axis=0)
+        df[col] = df[col].fillna(0)
+        df[col].mask(df[col] >= 1, 0, inplace=True)
+
+
+    #Encoding the population
+    label_population = pd.cut(x=df["population"], bins=[0,1000,100000,250000,1000000,5000000], labels = [1, 2, 3, 4, 5 ])
+    df["population"] = label_population
+
+    return df
+
+
+
 #%%
 """
 Plots a box-plot figure and indicates the fence values for the outliers
@@ -77,17 +120,20 @@ def heatmap(dataset=DF):
 # %%
     """
     Uses spectral clustering to visualize data
+    @param df
+        A dataset to analyze
+        If no dataset is provided, DF is the default value
     """
-def spectral():
+def spectral(df = DF):
     cluster_range = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     silhouette_avg = []
     for k in cluster_range:
         sil = []
         for i in range(4):
             model = SpectralClustering(n_clusters=4, assign_labels='kmeans', n_init=5, random_state=42, affinity='nearest_neighbors')
-            model.fit(DF)
+            model.fit(df)
             labels = model.labels_
-            silhouette = silhouette_score(DF, labels, metric='euclidean')
+            silhouette = silhouette_score(df, labels, metric='euclidean')
             sil.append(silhouette)
         silhouette_avg.append(np.mean(sil))
 
@@ -98,38 +144,53 @@ def spectral():
     plt.show()
 
 #%%
-def KMeansClustering():
+def KMeansClustering(df = DF):
+    """
+    KMeans clusters the dataset
+    @param df
+        a data frame
+    """
      #Fit the best silhouette average into a kmeans model
     kmeans = KMeans(n_clusters=9, random_state=42, n_init=10, max_iter=5)
-    kmeans.fit_transform(DF)
+    kmeans.fit_transform(df)
     centroids = kmeans.cluster_centers_
-    label = kmeans.fit_predict(DF)
+    label = kmeans.fit_predict(df)
 
-    df = copy.deepcopy(DF)
+    df = copy.deepcopy(df)
     df['labels'] = label
     tsne(df)
 
 # %%
-def dbscan():
+def dbscan( df = DF):
+    """
+    Clusters the dataset
+    @param df
+        a data frame
+    """
     db = DBSCAN(eps=0.3, min_samples=10)
-    clusters = db.fit(DF)
-    silhouette = silhouette_score(DF, clusters.labels_)
-    print("Silhouette coefficient for DBSCAN: ", silhouette)
+    clusters = db.fit(df)
+    # silhouette = silhouette_score(df, clusters.labels_)
+    # print("Silhouette coefficient for DBSCAN: ", silhouette)
 
     labels = clusters.labels_
     n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
     n_noise = list(labels).count(-1)
 
-    df = copy.deepcopy(DF)
+    df = copy.deepcopy(df)
     df['labels'] = labels
     tsne(df)
 
 # %%
-def hier():
+def hier(df = DF):
+    """
+    Clusters the dataset
+    @param df
+        a data frame
+    """
     hier = AgglomerativeClustering(n_clusters=9)
-    label = hier.fit_predict(DF)
+    label = hier.fit_predict(df)
 
-    df = copy.deepcopy(DF)
+    df = copy.deepcopy(df)
     df['labels'] = label
     tsne(df)
 
@@ -149,8 +210,8 @@ def tsne(df):
     fig.show()
 
 # %%
-def para_coordinates():
-    _FEATURE_COLUMNS = DF[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]]
-    col = DF[["population", "indigenous", "higher_education"]]
+def para_coordinates(df = DF):
+    _FEATURE_COLUMNS = df[["indigenous", "Poverty", "higher_education", "healthcare","age_15_29", "age_30_44", "age_45_59", "age_60_75", "catholic", "foreign_migrant"]]
+    col = df[["population", "indigenous", "higher_education"]]
     plt.figure(figsize=(20,20))
-    parallel_coordinates(DF, 'population')
+    parallel_coordinates(df, 'population')
